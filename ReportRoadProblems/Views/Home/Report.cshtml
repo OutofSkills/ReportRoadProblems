@@ -1,4 +1,6 @@
-﻿<!DOCTYPE html>
+﻿@model Report
+
+<!DOCTYPE html>
 <html>
 <head>
     <title>Report</title>
@@ -8,39 +10,46 @@
 <body>
     <h4>Report a road problem by marking the problem's location on the map and other mandatory details</h4>
     <div class="container-fluid">
-        <form>
-            <div class="form-row mb-3">
+        <!--Form with problem details-->
+        @using (Html.BeginForm("Report", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
+        {
+            <!--Google maps-->
+            <div class="row mb-3">
                 <div id="map"></div>
             </div>
+            <!--Geolocation coords-->
             <div class="row mb-3">
                 <div class="col-6">
-                    <label for="lat" class="form-label">Latitude</label>
-                    <input type="text" class="form-control" id="lat" disabled />
+                    <label for="Latitude" class="form-label">Latitude</label>
+                    <input type="text" class="form-control" id="lat" name="Latitude" />
                 </div>
                 <div class="col-6">
-                    <label for="lng" class="form-label">Longitude</label>
-                    <input type="text" class="form-control" id="lng" disabled />
+                    <label for="Longitude" class="form-label">Longitude</label>
+                    <input type="text" class="form-control" id="lng" name="Longitude" />
                 </div>
             </div>
+            <!--Map marked location-->
             <div class="row mb-3">
                 <div class="col">
-                    <label for="address" class="form-label">Address</label>
-                    <input type="text" class="form-control" id="address" disabled />
+                    <label for="Address" class="form-label">Address</label>
+                    <input type="text" class="form-control" id="addr" name="Address" />
                 </div>
             </div>
+            <!--Road problem severity-->
             <div class="row mb-3">
                 <div class="col-6">
                     <label for="severity" class="form-label">Severity Level</label>
-                    <select class="form-select" id="severity">
+                    <select asp-for="ProblemSeverity" class="form-select" id="severity">
                         <option value="" selected disabled hidden>Choose the problem's severity level</option>
                         <option value="Minor">Minor severity</option>
                         <option value="Medium">Medium severity</option>
                         <option value="Major">Major severity</option>
                     </select>
                 </div>
+                <!--Image of the problem-->
                 <div class="col-6">
-                    <label for="image" class="form-label">Problem Picture</label>
-                    <input type="file" class="form-control" id="image" />
+                    <label for="Picture" class="form-label">Problem Picture</label>
+                    <input asp-for="Picture" type="file" class="form-control" id="Picture" />
                 </div>
             </div>
             <div class="row mb-3">
@@ -48,8 +57,8 @@
                     <button class="btn btn-dark">Submit</button>
                 </div>
             </div>
-        </form>
-    </div>
+         }
+        </div>
 
     <!-- Async script executes immediately and must be after any DOM elements used in callback. -->
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD8lkA7jpB7VvGcIh7IUQZBmJ4tqGQ7hGA&callback=initMap&libraries=&v=weekly"

@@ -64,7 +64,7 @@ function getAddress(geocoder, latlng) {
         .geocode({ location: latlng })
         .then((response) => {
             if (response.results[0]) {
-                document.getElementById("address").value = response.results[0].formatted_address;
+                document.getElementById("addr").value = response.results[0].formatted_address;
             } else {
                 alert("No results found");
             }
