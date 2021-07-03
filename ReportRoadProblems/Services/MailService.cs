@@ -19,6 +19,7 @@ namespace ReportRoadProblems.Services
             _mailSettings = mailSettings.Value;
         }
 
+        //gets the report and sends it through email
         public void SendEmail(Report report)
         {
             using (var client = new SmtpClient("smtp.gmail.com", 587))
@@ -32,7 +33,7 @@ namespace ReportRoadProblems.Services
                 email.Subject = "Report - Road Problem";
 
                 email.IsBodyHtml = true;
-                email.Body = formatBodyContent(report);
+                email.Body = GetBodyContent(report);
 
                 if (report.Picture != null && report.Picture.Length > 0)
                 {
@@ -49,7 +50,8 @@ namespace ReportRoadProblems.Services
             }
         }
 
-        private string formatBodyContent(Report report)
+        //returns the email body content
+        private string GetBodyContent(Report report)
         {
             string bodyContent = "<html>" +
                                     "<span>Buna ziua,</span>" + "<br>" +

@@ -13,7 +13,7 @@ namespace ReportRoadProblems.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        private IMailService _mailService;
+        private readonly IMailService _mailService;
 
         public HomeController(ILogger<HomeController> logger, IMailService mailService)
         {
@@ -28,13 +28,20 @@ namespace ReportRoadProblems.Controllers
         [HttpGet]
         public IActionResult Report()
         {
+            ViewData["success"] = 0;
+
             return View();
         }
         [HttpPost]
         public IActionResult Report(Report report)
         {
+            //set a flag for success message
+            ViewData["success"] = 1;
+
             if (!ModelState.IsValid)
             {
+                ViewData["success"] = 0;
+
                 return View(report);
             }
 
@@ -43,6 +50,7 @@ namespace ReportRoadProblems.Controllers
                 _mailService.SendEmail(report);
             }catch(Exception ex)
             {
+                ViewData["success"] = 0;
                 _logger.LogDebug(ex.Message);
             }
 
