@@ -37,14 +37,14 @@ namespace ReportRoadProblems.Controllers
         {
             //set a flag for success message
             ViewData["success"] = 1;
-
+            //If the model is not valid return back
             if (!ModelState.IsValid)
             {
                 ViewData["success"] = 0;
 
                 return View(report);
             }
-
+            // If the model is valid send the email
             try
             {
                 _mailService.SendEmail(report);

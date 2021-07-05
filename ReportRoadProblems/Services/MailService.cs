@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.Options;
-using MimeKit;
 using ReportRoadProblems.Models;
 using System;
 using System.Collections.Generic;
@@ -14,27 +13,29 @@ namespace ReportRoadProblems.Services
     public class MailService : IMailService
     {
         private readonly MailSettings _mailSettings;
+
         public MailService(IOptions<MailSettings> mailSettings)
         {
             _mailSettings = mailSettings.Value;
         }
 
-        //gets the report and sends it through email
+        // Gets the report and sends it through email
         public void SendEmail(Report report)
         {
-            using (var client = new SmtpClient("smtp.gmail.com", 587))
+            using (var client = new SmtpClient(_mailSettings.Host, _mailSettings.Port))
             {
                 client.EnableSsl = true;
                 client.Credentials = new NetworkCredential(_mailSettings.Mail, _mailSettings.Password);
 
                 var email = new MailMessage();
                 email.From = new MailAddress(_mailSettings.Mail);
+                // Receiver
                 email.To.Add(new MailAddress("kojocaru.ivan@gmail.com"));
                 email.Subject = "Report - Road Problem";
 
                 email.IsBodyHtml = true;
                 email.Body = GetBodyContent(report);
-
+                // Get the picture from the memory stream
                 if (report.Picture != null && report.Picture.Length > 0)
                 {
                     using (var ms = new MemoryStream())
@@ -50,7 +51,7 @@ namespace ReportRoadProblems.Services
             }
         }
 
-        //returns the email body content
+        // Format the body content as HTML and include the report details
         private string GetBodyContent(Report report)
         {
             string bodyContent = "<html>" +

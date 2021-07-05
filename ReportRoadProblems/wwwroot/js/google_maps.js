@@ -21,7 +21,7 @@ function initMap() {
     locationButton.classList.add("custom-map-control-button");
     locationButton.type = "button";
     map.controls[google.maps.ControlPosition.TOP_CENTER].push(locationButton);
-
+    // Handle the current location button click
     locationButton.addEventListener("click", () => {
         // Try HTML5 geolocation.
         if (navigator.geolocation) {
@@ -60,17 +60,6 @@ function initMap() {
     // Adds a marker at the center of the map.
     addMarker(Craiova);
 }
-
-function handleLocationError(browserHasGeolocation, infoWindow, pos) {
-    infoWindow.setPosition(pos);
-    infoWindow.setContent(
-        browserHasGeolocation
-            ? "Error: The Geolocation service failed."
-            : "Error: Your browser doesn't support geolocation."
-    );
-    infoWindow.open(map);
-}
-
 
 // Adds a marker to the map and push to the array.
 function addMarker(location) {
