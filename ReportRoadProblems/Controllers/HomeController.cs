@@ -62,7 +62,11 @@ namespace ReportRoadProblems.Controllers
         [Route("/Home/ProblemLocation/{latitude}/{longitude}")]
         public IActionResult ProblemLocation(string latitude, string longitude)
         {
+            ViewBag.ErrorStatus = "";
             if (String.IsNullOrEmpty(latitude) || String.IsNullOrEmpty(longitude))
+                ViewBag.ErrorStatus = "Wrong coordinates";
+
+            if (!Double.TryParse(latitude, out var latit) || !Double.TryParse(longitude, out var longit))
                 ViewBag.ErrorStatus = "Wrong coordinates";
 
             ViewBag.latitude = latitude;

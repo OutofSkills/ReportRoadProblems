@@ -8,34 +8,45 @@
 
 </head>
 <body>
-    <h4>Reported problem's location</h4>
-    <div class="container-fluid">
-        <!--Google maps-->
-        <div class="row mb-3">
-            <div id="map"></div>
-        </div>
-        <!--Geolocation coords-->
-        <div class="row mb-3">
-            <div class="col-6">
-                <label for="Latitude" class="form-label">Latitude</label>
-                <input asp-for="Latitude" type="text" class="form-control" id="lat" disabled/>
-                <span asp-validation-for="Latitude" class="text-danger"></span>
+    @if (ViewBag.ErrorStatus == "")
+    {
+
+
+        <h4>Reported problem's location</h4>
+        <div class="container-fluid">
+            <!--Google maps-->
+            <div class="row mb-3">
+                <div id="map"></div>
             </div>
-            <div class="col-6">
-                <label for="Longitude" class="form-label">Longitude</label>
-                <input asp-for="Longitude" type="text" class="form-control" id="lng" disabled/>
-                <span asp-validation-for="Longitude" class="text-danger"></span>
+            <!--Geolocation coords-->
+            <div class="row mb-3">
+                <div class="col-6">
+                    <label for="Latitude" class="form-label">Latitude</label>
+                    <input asp-for="Latitude" type="text" class="form-control" id="lat" disabled/>
+                    <span asp-validation-for="Latitude" class="text-danger"></span>
+                </div>
+                <div class="col-6">
+                    <label for="Longitude" class="form-label">Longitude</label>
+                    <input asp-for="Longitude" type="text" class="form-control" id="lng" disabled/>
+                    <span asp-validation-for="Longitude" class="text-danger"></span>
+                </div>
+            </div>
+            <!--Map marked location-->
+            <div class="row mb-3">
+                <div class="col">
+                    <label for="Address" class="form-label">Address</label>
+                    <input asp-for="Address" type="text" class="form-control" id="addr" />
+                    <span asp-validation-for="Address" class="text-danger"></span>
+                </div>
             </div>
         </div>
-        <!--Map marked location-->
-        <div class="row mb-3">
-            <div class="col">
-                <label for="Address" class="form-label">Address</label>
-                <input asp-for="Address" type="text" class="form-control" id="addr" />
-                <span asp-validation-for="Address" class="text-danger"></span>
-            </div>
+    }
+    else
+    { 
+        <div class="alert-danger d-flex justify-content-center" style="font-size:xx-large">
+            @ViewBag.ErrorStatus
         </div>
-    </div>
+    }
 
     <!-- Async script executes immediately and must be after any DOM elements used in callback. -->
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD8lkA7jpB7VvGcIh7IUQZBmJ4tqGQ7hGA&callback=initMap&libraries=&v=weekly"
