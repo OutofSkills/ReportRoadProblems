@@ -32,6 +32,7 @@ namespace ReportRoadProblems.Controllers
 
             return View();
         }
+
         [HttpPost]
         public IActionResult Report(Report report)
         {
@@ -56,6 +57,20 @@ namespace ReportRoadProblems.Controllers
 
             return View();
         }
+
+        [HttpGet]
+        [Route("/Home/ProblemLocation/{latitude}/{longitude}")]
+        public IActionResult ProblemLocation(string latitude, string longitude)
+        {
+            if (String.IsNullOrEmpty(latitude) || String.IsNullOrEmpty(longitude))
+                ViewBag.ErrorStatus = "Wrong coordinates";
+
+            ViewBag.latitude = latitude;
+            ViewBag.longitude = longitude;
+
+            return View();
+        }
+
 
         public IActionResult Privacy()
         {

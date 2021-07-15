@@ -64,6 +64,8 @@ namespace ReportRoadProblems.Services
                                     "<span>Latitudine: " + report.Latitude + "</span> " + "<br>" +
                                     "<span>Longitudine: " + report.Longitude + " .</span>" + "<br>" +
                                     "<span>Adresa: " + report.Address + "</span>" + "<br><br>" +
+
+                                    "<b>Pentru localizare pe harta accesati urmatorul link: https://localhost:44374/Home/ProblemLocation/" + report.Latitude + "/" + report.Longitude + " </b> <br>" +
                                     
                                     "<span>Numai bine,</span>" + "<br>" +
                                     "ReportRoadProblems.ro" +

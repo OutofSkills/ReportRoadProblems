@@ -1,0 +1,110 @@
+﻿@model Report
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Problem Location</title>
+    <link rel="stylesheet" href="/css/google-maps.css" />
+
+</head>
+<body>
+    <h4>Reported problem's location</h4>
+    <div class="container-fluid">
+        <!--Google maps-->
+        <div class="row mb-3">
+            <div id="map"></div>
+        </div>
+        <!--Geolocation coords-->
+        <div class="row mb-3">
+            <div class="col-6">
+                <label for="Latitude" class="form-label">Latitude</label>
+                <input asp-for="Latitude" type="text" class="form-control" id="lat" disabled/>
+                <span asp-validation-for="Latitude" class="text-danger"></span>
+            </div>
+            <div class="col-6">
+                <label for="Longitude" class="form-label">Longitude</label>
+                <input asp-for="Longitude" type="text" class="form-control" id="lng" disabled/>
+                <span asp-validation-for="Longitude" class="text-danger"></span>
+            </div>
+        </div>
+        <!--Map marked location-->
+        <div class="row mb-3">
+            <div class="col">
+                <label for="Address" class="form-label">Address</label>
+                <input asp-for="Address" type="text" class="form-control" id="addr" />
+                <span asp-validation-for="Address" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Async script executes immediately and must be after any DOM elements used in callback. -->
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD8lkA7jpB7VvGcIh7IUQZBmJ4tqGQ7hGA&callback=initMap&libraries=&v=weekly"
+            async></script>
+</body>
+</html>
+
+@section Scripts{
+    <script>
+    // Initialize and add the map
+    // In the following example, markers appear when the user clicks on the map.
+    // The markers are stored in an array.
+    // The user can then click an option to hide, show or delete the markers.
+    let map, infoWindow;
+    let markers = [];
+
+    function initMap() {
+        // Serialize latitude and longitide passed from the controller
+        var latitude =  parseFloat(@Html.Raw(Json.Serialize(@ViewBag.latitude)));
+        var longitude = parseFloat(@Html.Raw(Json.Serialize(@ViewBag.longitude)));
+
+        const afectedLocation = { lat: latitude, lng: longitude };
+        map = new google.maps.Map(document.getElementById("map"), {
+            zoom: 13,
+            center: afectedLocation,
+            mapTypeId: "roadmap",
+        });
+        // Adds a marker at the center of the map.
+        addMarker(afectedLocation);
+
+        // Address decoder
+        const geocoder = new google.maps.Geocoder();
+        // Get address
+        getAddress(geocoder, afectedLocation);
+    }
+
+    // Adds a marker to the map and push to the array.
+    function addMarker(location) {
+        const marker = new google.maps.Marker({
+            position: location,
+            map: map,
+        });
+        markers.push(marker);
+    }
+
+    //Gets the address from the geolocation latlng wich are the coordinates of the marked location
+    function getAddress(geocoder, latlng) {
+        geocoder
+            .geocode({ location: latlng })
+            .then((response) => {
+                if (response.results[0]) {
+                    document.getElementById("addr").value = response.results[0].formatted_address;
+                } else {
+                    alert("No results found");
+                }
+            })
+            .catch((e) => alert("Geocoder failed due to: " + e));
+    }
+
+    //handle geolocation error
+    function handleLocationError(browserHasGeolocation, infoWindow, pos) {
+        infoWindow.setPosition(pos);
+        infoWindow.setContent(
+            browserHasGeolocation
+                ? "Error: The Geolocation service failed."
+                : "Error: Your browser doesn't support geolocation."
+        );
+        infoWindow.open(map);
+    }
+
+    </script>
+}
